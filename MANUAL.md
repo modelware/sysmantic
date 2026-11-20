@@ -59,8 +59,10 @@ manual opens with *Sysmantic: Open Manual*, or the book icon in the panel.
 Agents can read, compute with and change your model through Sysmantic, on the same live model you
 see.
 
-In **VS Code**, agents such as Copilot get Sysmantic's tools with nothing to set up. In **Claude
-Code**, add it once per model:
+In **VS Code**, agents such as Copilot get Sysmantic's tools with nothing to set up. **Claude
+Code** and other agents run the `sysmantic` command, so it must be on your PATH: install it (see
+the [README](README.md)), or, if you have the VS Code extension, run *Sysmantic: Install
+'sysmantic' Command in PATH*. Then add it once per model:
 
 ```sh
 claude mcp add sysmantic -- sysmantic mcp --workspace /path/to/model
@@ -77,7 +79,9 @@ Then ask in plain words: "Which requirements fail, and why?"
 
 ### On the command line
 
-The `sysmantic` command works in any terminal, in your model's folder.
+The `sysmantic` command works in any terminal, in your model's folder. The install script puts it
+on your PATH; with only the VS Code extension, run *Sysmantic: Install 'sysmantic' Command in PATH*
+to use the command it includes.
 
 ```sh
 sysmantic check      # problems in the whole model
@@ -322,6 +326,7 @@ The extension's commands and settings.
 | Sysmantic: Show Model Server | Shows the model's server |
 | Sysmantic: Restart Model Server | Restarts it |
 | Sysmantic: Show Output | Shows the extension's log |
+| Sysmantic: Install 'sysmantic' Command in PATH | Makes the included `sysmantic` command available in terminals and to other agents |
 
 | Setting | What it does |
 |---|---|
