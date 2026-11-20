@@ -1,13 +1,13 @@
-<p align="center"><img src="images/sysight.svg" width="96" alt="Sysight"></p>
+<p align="center"><img src="images/sysmantic.svg" width="96" alt="Sysmantic"></p>
 
-<h1 align="center">Sysight: SysML v2 Insight</h1>
+<h1 align="center">Sysmantic: SysML v2 Semantic IDE</h1>
 
 <p align="center">
-  <a href="https://github.com/modelware/sysight/releases/latest"><img src="https://img.shields.io/github/v/release/modelware/sysight?label=release" alt="Latest release"></a>
+  <a href="https://github.com/modelware/sysmantic/releases/latest"><img src="https://img.shields.io/github/v/release/modelware/sysmantic?label=release" alt="Latest release"></a>
   <a href="MANUAL.md"><img src="https://img.shields.io/badge/manual-read-4C78A8" alt="Manual"></a>
 </p>
 
-[Sysight](https://www.modelware.io/sysight), by [Modelware](https://www.modelware.io), checks, evaluates and queries SysML v2 and
+[Sysmantic](https://www.modelware.io/sysmantic), by [Modelware](https://www.modelware.io), checks, evaluates and queries SysML v2 and
 KerML models, from the command line, VS Code and AI agents (MCP). The standard libraries are
 built in.
 
@@ -33,16 +33,16 @@ built in.
 
 ### VS Code extension
 
-Install **Sysight** (`modelware.sysight`) from the Extensions view, from the
-[VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=modelware.sysight), or,
+Install **Sysmantic** (`modelware.sysmantic`) from the Extensions view, from the
+[VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=modelware.sysmantic), or,
 in VSCodium, Cursor and other editors that use it, from
-[Open VSX](https://open-vsx.org/extension/modelware/sysight). Updates install automatically.
+[Open VSX](https://open-vsx.org/extension/modelware/sysmantic). Updates install automatically.
 
-The extension includes the `sysight` command it needs. Open a folder with `.sysml` or `.kerml`
+The extension includes the `sysmantic` command it needs. Open a folder with `.sysml` or `.kerml`
 files to start.
 
 Without access to a marketplace, download the `.vsix` for your platform from the
-[latest release](https://github.com/modelware/sysight/releases/latest) (`darwin-arm64`,
+[latest release](https://github.com/modelware/sysmantic/releases/latest) (`darwin-arm64`,
 `darwin-x64`, `linux-x64`, `linux-arm64` or `win32-x64`) and run **Extensions: Install from
 VSIX…**.
 
@@ -51,26 +51,26 @@ VSIX…**.
 macOS, Linux:
 
 ```sh
-curl -fsSL https://github.com/modelware/sysight/releases/latest/download/install.sh | sh
+curl -fsSL https://github.com/modelware/sysmantic/releases/latest/download/install.sh | sh
 ```
 
 Windows (PowerShell):
 
 ```powershell
-powershell -c "irm https://github.com/modelware/sysight/releases/latest/download/install.ps1 | iex"
+powershell -c "irm https://github.com/modelware/sysmantic/releases/latest/download/install.ps1 | iex"
 ```
 
 ### AI agents (MCP)
 
-Install the command line (above), then register `sysight mcp` with your agent, for example in
+Install the command line (above), then register `sysmantic mcp` with your agent, for example in
 Claude Code:
 
 ```sh
-claude mcp add sysight -- sysight mcp --workspace /path/to/model
+claude mcp add sysmantic -- sysmantic mcp --workspace /path/to/model
 ```
 
 Other clients take the same command in their MCP configuration:
-`{"command": "sysight", "args": ["mcp", "--workspace", "/path/to/model"]}`.
+`{"command": "sysmantic", "args": ["mcp", "--workspace", "/path/to/model"]}`.
 
 ### CI
 
@@ -78,40 +78,40 @@ In a GitHub Actions workflow (or any CI on macOS, Linux or Windows):
 
 ```yaml
 - run: |
-    curl -fsSL https://github.com/modelware/sysight/releases/latest/download/install.sh | sh
+    curl -fsSL https://github.com/modelware/sysmantic/releases/latest/download/install.sh | sh
     echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-- run: sysight check
+- run: sysmantic check
 ```
 
 To update the command, run the install command again. To pin a version, set
-`SYSIGHT_VERSION=X.Y.Z`.
+`SYSMANTIC_VERSION=X.Y.Z`.
 
 ## Get started
 
 ```sh
 cd my-model
-sysight check                                      # problems in the whole model
-sysight evaluate 'Vehicle::mass' --unit kg         # a value
-sysight query 'SELECT ?p WHERE { ?p a sysml:Part }' # anything, in SPARQL
+sysmantic check                                      # problems in the whole model
+sysmantic evaluate 'Vehicle::mass' --unit kg         # a value
+sysmantic query 'SELECT ?p WHERE { ?p a sysml:Part }' # anything, in SPARQL
 ```
 
-The [manual](MANUAL.md) covers using Sysight in VS Code, with agents, on the command line, in
+The [manual](MANUAL.md) covers using Sysmantic in VS Code, with agents, on the command line, in
 CI and from programs (its HTTP API): queries, values and verdicts, graphs, changing the model,
-and settings. Agents read it too, through the MCP tool `manual`, and `sysight manual` prints it.
+and settings. Agents read it too, through the MCP tool `manual`, and `sysmantic manual` prints it.
 
 ## Example
 
-The [Apollo 11 dashboard](https://www.modelware.io/apollo-11-sysml-v2/) is built with Sysight
+The [Apollo 11 dashboard](https://www.modelware.io/apollo-11-sysml-v2/) is built with Sysmantic
 from Airbus's [SysML v2 model of Apollo 11](https://github.com/airbus/apollo-11-sysml-v2): the
 timeline, functions, budgets, requirements, cost and model quality. Each page was made with a
-Jupyter notebook that sends SPARQL queries to the model's Sysight server and charts the answers
+Jupyter notebook that sends SPARQL queries to the model's Sysmantic server and charts the answers
 (see the manual's [Programs and notebooks](MANUAL.md#programs-and-notebooks)).
 
 ## Performance
 
 On [Airbus's Apollo 11 model](https://github.com/airbus/apollo-11-sysml-v2) (28 files, about
 7,200 lines, with the standard libraries: about 143,000 facts), on an Apple M4, end to end from
-the `sysight` command:
+the `sysmantic` command:
 
 | Operation | Cold (server starting) | Warm (server running) |
 |---|---:|---:|
@@ -119,7 +119,7 @@ the `sysight` command:
 | Check after an edit | | 27 ms |
 | SPARQL query | 195 ms | 5 ms |
 
-The first run after installing or updating Sysight also prepares the standard libraries, once:
+The first run after installing or updating Sysmantic also prepares the standard libraries, once:
 about 1 s.
 
 The model stays loaded and current as files change, so the editor, agents and commands answer
@@ -127,7 +127,7 @@ in milliseconds.
 
 ## Support
 
-Sysight is free to use, and its standard support is through [issues](https://github.com/modelware/sysight/issues):
+Sysmantic is free to use, and its standard support is through [issues](https://github.com/modelware/sysmantic/issues):
 report problems, request features and ask questions there. For organizations that need committed
 response times, priority fixes or help adopting it, Modelware offers enterprise support
 packages: info@modelware.io.

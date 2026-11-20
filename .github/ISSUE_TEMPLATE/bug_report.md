@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Something Sysight gets wrong
+about: Something Sysmantic gets wrong
 labels: bug
 ---
 
@@ -13,5 +13,5 @@ labels: bug
 
 ```
 
-**Version** (`sysight --version`) and how you run it (command line, VS Code, MCP; OS)
+**Version** (`sysmantic --version`) and how you run it (command line, VS Code, MCP; OS)
 
