@@ -60,6 +60,11 @@ Windows (PowerShell):
 powershell -c "irm https://github.com/modelware/sysmantic/releases/latest/download/install.ps1 | iex"
 ```
 
+The command goes into `~/.local/bin` (on Windows, `%LOCALAPPDATA%\sysmantic\bin`); set
+`SYSMANTIC_INSTALL_DIR` to choose another folder. If that folder is not on your PATH, the installer adds it (on macOS
+and Linux, in your shell's startup file; set `SYSMANTIC_NO_MODIFY_PATH=1` to skip that), so new terminals
+and editors find `sysmantic`.
+
 ### AI agents (MCP)
 
 Install the command line (above), then register `sysmantic mcp` with your agent, for example in
@@ -70,7 +75,8 @@ claude mcp add sysmantic -- sysmantic mcp --workspace /path/to/model
 ```
 
 Other clients take the same command in their MCP configuration:
-`{"command": "sysmantic", "args": ["mcp", "--workspace", "/path/to/model"]}`.
+`{"command": "sysmantic", "args": ["mcp", "--workspace", "/path/to/model"]}`. If your agent does not
+find `sysmantic`, give its full path, such as `/Users/you/.local/bin/sysmantic`.
 
 ### CI
 
