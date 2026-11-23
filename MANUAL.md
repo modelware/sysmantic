@@ -15,6 +15,9 @@ it, see the [README](README.md).
   - [Compute values and verdicts](#compute-values-and-verdicts)
   - [Ask questions](#ask-questions)
   - [See it as a graph](#see-it-as-a-graph)
+  - [See it in the standard views](#see-it-in-the-standard-views)
+  - [Style the views](#style-the-views)
+  - [Work in a notebook](#work-in-a-notebook)
   - [Change the model](#change-the-model)
   - [Export and import](#export-and-import)
   - [Use it from programs](#use-it-from-programs)
@@ -51,7 +54,8 @@ milliseconds.
 Open your model's folder, and Sysmantic checks it as you type.
 
 You get problems in the Problems view, values and verdicts on hover and inline, navigation,
-rename, completion and formatting, the Sysmantic panel for questions, and the graph view. This
+rename, completion and formatting, the Sysmantic panel for questions, the graph view, and the
+standard views. This
 manual opens with *Sysmantic: Open Manual*, or the book icon in the panel.
 
 ### With AI agents
@@ -168,6 +172,211 @@ See your model as a graph in VS Code, and explore how its elements relate.
 Hover to highlight neighbors, double-click to open an element, drag to pin. *Save* keeps the
 view, layout included, as a query file to commit with the model.
 
+### See it in the standard views
+
+See your model in SysML's standard views, as diagrams in VS Code. Open one from the editor
+(right-click on an element) or the Model Explorer (right-click an element), or from the Command
+Palette:
+
+| View | Shows | Open it on |
+|---|---|---|
+| *Open General View* | Definitions, usages and packages, with their compartments, and how they specialize, define, compose, satisfy and depend on one another | A package (its members), an element (it and what it relates to), or a `view` in the model (what it exposes and its filter keeps) |
+| *Open Interconnection View* | A part's parts, nested, their ports, and the connections, interfaces, flows and bindings between them | A part definition or usage |
+| *Open Action Flow View* | An action's actions, their parameters as pins, the control nodes, and the successions and flows between them | An action, or a state (its `do` action) |
+| *Open State Transition View* | A state's states, their entry, do and exit actions, and the transitions between them with their triggers, guards and effects | A state definition or usage |
+| *Open Sequence View* | Lifelines and what happens to each, in order: events and the messages between them, or a timeline of timeslices and snapshots | An occurrence or part with events and messages, or with timeslices |
+| *Open Grid View* | Tables of a package's elements, a table per kind, with their ids, types, documentation, metadata, values and traces; and matrices of their relationships (satisfy, dependencies, allocation) | A package or definition |
+| *Open Geometry View* | Parts as the Geometry library's solids, sized by their dimensions and placed by their coordinate frames, in three dimensions | A part whose parts are shaped (`:> ShapeItems::Cylinder`, …) |
+
+A `view` you declare in the model opens as it declares: as the standard view it is defined by
+(`view propulsion : StandardViewDefinitions::InterconnectionView { expose Rocket; }`), else as
+its rendering asks (`render asElementTable;`), of what it exposes. *Open View* opens it so (on
+anything else, a General View).
+
+Opened on something it does not show (an Interconnection View of a package), a view lists what it
+can show there, to pick from.
+
+**Agents** can show you one with the `show_view` tool ("show me how the spacecraft's interfaces
+connect"), and read what one shows with `read_view`, as text or as a picture: "which of these
+requirements does nothing satisfy?". To make a point clear, an agent can highlight what matters
+(it stands out, the rest steps back, and the view opens on it), say in a note above the view what
+to see, and style that view alone; close the note to see the view as usual. `show_view`, and a
+picture from `read_view`, need the model open in VS Code; its text, not.
+
+In a diagram: scroll to pan, pinch (or Ctrl/Cmd and scroll) to zoom, **F** to fit, **M** for the
+minimap. Hover an element to bring out its relationships; double-click it to open its
+declaration, or a package to open its view (**Alt+←** goes back). The element at the cursor in the
+editor is selected in the views of its model, and the views follow the model as you edit. Export a
+diagram as SVG or PNG, a Grid View's table as CSV, a Geometry View as PNG.
+
+In an Interconnection View, ⊕ on a part opens it in place, to show its definition's parts and
+ports (⊖ folds them back). A `view`'s filters keep what they name: by metaclass (`filter
+@SysML::PartUsage;`), by metadata (`@Safety`), or by type (`hastype Engine`), with `not`, `and`
+and `or`; a filter on an expose (`expose P::*[@Safety];`) keeps what that expose brings in.
+
+In a Grid View, click a column's heading to sort by it and type in *Filter rows* to narrow the
+rows; the links in a cell open what they name. In a Geometry View, drag to turn it, right-drag to
+move it, and choose *Iso*, *Front*, *Top* or *Side*; *Ortho* shows it without perspective, *Wireframe* as edges only, and *Color* colors the parts
+by a value they give (mass, temperature, …), with its scale; *Names* labels the parts, and *Parts* lists
+them with their dimensions.
+
+### Style the views
+
+Restyle the standard views with your own CSS.
+
+Set `sysmantic.views.stylesheet` to a CSS file (relative to the model's root, or absolute): it
+applies after the views' own style, to every view of the model, and to their exports. Saving it
+updates the views.
+
+Every shape is classed for what it shows, so you can style any of it:
+
+| Classes | What they are |
+|---|---|
+| `.node` | A box; with `.definition`, `.usage` or `.package`, and its kind (`.part`, `.port`, `.action`, `.requirement`, `.state`, …), and `.abstract`, `.library`, `.focus` (what the view is of), `.selected` |
+| `.node .body`, `.node .accent` | A box's outline, and the stripe along its top |
+| `.node .keyword`, `.node .name` | `«part def»`, and the name (`.label`, then `.suffix`: `: Engine [1]`) |
+| `.compartment.attributes` (`.ports`, `.parts`, `.doc`, `.parameters`, …) | A compartment: its `.compartment-title` and its `.line`s |
+| `.edge.specialization` (`.definition`, `.composition`, `.satisfy`, `.dependency`, `.connection`, `.interface`, `.flow`, `.binding`, `.succession`, `.transition`, `.message`, …) | A relationship: its `.line`, and its `.edge-label` |
+| `.port` (`.in`, `.out`, `.inout`, `.conjugated`, `.pin`) | A port or parameter pin: its `.port-box`, `.port-label` (`.port-name`, `.port-type`) |
+| `.node.control` (`.start`, `.done`, `.fork`, `.join`, `.decide`, `.merge`) | A control node or pseudo-state |
+| `.seq-band`, `.seq-row`, `.lifeline`, `.seq-card`, `.seq-item` (`.perform`, `.value`, `.event`) | A Sequence View's parts |
+| `.grid-table`, `.grid-matrix`, `.mark` | A Grid View's tables and matrices; a matrix's `.row-head`, `.col-head`, `.total` |
+| `.col-Rationale`, `.col-dryMass`, `.col-Satisfied-by`, `.col-refinement-to`, `.col-from-refinement`, … | A table's column, by its heading (its `th` and every `td`) |
+| `.row-requirement`, `.row-part`, … with `.row-definition` or `.row-usage` | A row, by the kind of element it is (a matrix's columns: `.col-kind-requirement`, …) |
+
+And variables set the colors and sizes. Sizes are measured before the layout, so changing them
+lays the diagram out anew:
+
+| Variables | What they set |
+|---|---|
+| `--accent` | A box's color (each kind sets it: `.node.requirement { --accent: #d1242f; }`) |
+| `--font`, `--font-size`, `--name-size`, `--keyword-size` | Type |
+| `--node-padding-x`, `--node-padding-y`, `--line-height`, `--node-min-width`, `--node-max-width` | A box's size |
+| `--node-spacing`, `--layer-spacing` | The space between boxes, and between rows of them |
+| `--edge-corner-radius`, `--port-size` | Edges' bends, ports' size |
+| `--canvas`, `--ink`, `--muted`, `--edge`, `--node-fill`, `--node-stroke` | The page's colors (else the theme's) |
+| `--solid-1` … `--solid-8` | A Geometry View's colors, a kind of part each |
+
+For example:
+
+```css
+/* Requirements in red; no documentation in boxes; types beside ports; square bends. */
+.node.requirement { --accent: #d1242f; }
+.compartment.doc { display: none; }
+.port-label .port-type { display: inline; }
+:root { --edge-corner-radius: 0; --layer-spacing: 80px; }
+```
+
+To style some views and not others, start a rule with the view's kind or, for a `view` declared
+in the model, its name:
+
+```css
+.view-grid .col-Values { display: none; }             /* no Values column */
+.view-grid tr.row-requirement.row-usage td { background: #fff7e6; }
+.view-sequence .seq-card { font-size: 11px; }        /* Sequence Views only */
+.view-propulsion .node.part { --accent: #c4610f; }    /* the view `propulsion` only */
+```
+
+The kinds: `.view-general`, `.view-interconnection`, `.view-action-flow`, `.view-state-transition`,
+`.view-sequence`, `.view-grid`, `.view-geometry`.
+
+A stylesheet can change how the views look and what they leave out (`display: none`), not what
+they show or where: the layout is the views' own.
+
+### Work in a notebook
+
+Analyze your model in Jupyter or VS Code notebooks: add SysML in cells, query it into tables,
+compute values and verdicts in Python, and draw the standard views in the notebook.
+
+Install the `sysmantic` Python package, with what notebooks need:
+
+```sh
+pip install "sysmantic[notebook]"
+```
+
+It runs the `sysmantic` command: the one on your PATH, the one `SYSMANTIC_PATH` names, or the one
+the VS Code extension includes. In the notebook's first cell:
+
+```python
+import sysmantic
+```
+
+The notebook works on the model of its folder (see [Your model](#your-model)), the same model VS
+Code and agents see.
+
+**In cells:**
+
+| Command | What it does |
+|---|---|
+| `%%sysml [name]` | Adds the cell's SysML to the model, as if it were a file (none is written), and shows what it declares and its problems. Running the cell again replaces it. |
+| `%sysml <expression>` | Gives a value: `%sysml Rover::rover.mass` gives `1900 kg` |
+| `%sysml check` | Gives the model's problems |
+| `%sysml clear` | Removes the SysML the notebook added |
+| `%%sparql [-o var] [--no-entailment]` | Gives a query's answer as a table (true or false for an `ASK`). With `-o`, keeps it in `var` instead of showing it. |
+| `%viz [--view=V] <element>` | Draws one of the [standard views](#see-it-in-the-standard-views) of an element |
+
+`%viz` options:
+
+| Option | What it does |
+|---|---|
+| `--view=` | `general`, `interconnection`, `action-flow`, `state-transition`, `sequence`, `grid` or `geometry`; also `tree`, `mixed`, `case`, `state`, `action` and `table`. Without it, the view that suits the element. |
+| `--highlight=A,B` | Outlines these elements |
+| `--fade` | With `--highlight`, makes the rest step back |
+| `--note="…"` | Says above the view what to see |
+| `--style="…"` | CSS for this view only, as in [Style the views](#style-the-views): `--style=".col-Documentation { display: none; }"` |
+| `--height=` | The view's height, in pixels |
+
+The views work as they do in VS Code: open a package, open a part in place, go back, hover,
+export.
+
+**In Python:**
+
+| Function | What it does |
+|---|---|
+| `sysmantic.evaluate(target, unit=None, context=None)` | A value: a number with its unit (use it as a float; `.unit` gives the unit), a boolean, or text |
+| `sysmantic.verify(target)` | Whether a requirement, constraint or `satisfy` holds: `.verdict` is `satisfied`, `violated` or `undetermined`, with `.why`; true if satisfied |
+| `sysmantic.query(sparql)` | As `%%sparql`: a pandas table, true or false, or N-Triples for a `CONSTRUCT` |
+| `sysmantic.sysml(text, name)` | As `%%sysml`: adds SysML under `name`, replacing what was there |
+| `sysmantic.view(element, kind, highlight=[…], fade=False, note=None, style=None, height=None)` | As `%viz` |
+| `sysmantic.table(df, formats=None)` | Shows a table as a report does: no row numbers, text left, numbers right; `formats` by column (`{"mass (kg)": "{:.2f}"}`) |
+| `sysmantic.model()` | The notebook's model, with these and `check()` and `drop(name=None)` |
+
+A problem (an element that does not exist, a view that does not apply) raises
+`sysmantic.SysmanticError` with the reason.
+
+For example, a trade study that writes each candidate into the model, and lets the model compute
+its mass and decide its requirement. The model gives the drone's battery mass as a `default`, so a
+candidate can change it:
+
+```python
+import pandas as pd
+
+rows = []
+for pack, kg in [("4S 5000", 0.50), ("4S 8000", 0.78), ("6S 5000", 0.75)]:
+    name = "Option_" + pack.replace(" ", "_")
+    sysmantic.sysml(f"""package {name} {{
+        private import Drone::*;
+        private import SI::*;
+        part design :> drone {{ part :>> battery {{ attribute :>> mass = {kg} [kg]; }} }}
+        requirement mass : TakeoffMass {{ subject :>> d = design; }}
+    }}""", name)
+    rows.append({
+        "pack": pack,
+        "takeoff mass (kg)": float(sysmantic.evaluate(f"{name}::design.takeoffMass", unit="kg")),
+        "mass requirement": sysmantic.verify(f"{name}::mass").verdict,
+    })
+sysmantic.table(pd.DataFrame(rows), {"takeoff mass (kg)": "{:.3f}"})
+```
+
+```
+%viz --view=general Drone::TakeoffMass --highlight=Drone::drone
+```
+
+While the notebook runs, the SysML it adds is part of the model everywhere: in VS Code's
+problems, Model Explorer and views, and for agents. The views draw when the notebook runs, in
+Jupyter or VS Code. Opened elsewhere, a notebook shows its tables and charts, and a placeholder
+for each view.
+
 ### Change the model
 
 Name what to change, and Sysmantic edits the files for you, touching only that.
@@ -213,7 +422,8 @@ files unless you add `--force`.
 
 ### Use it from programs
 
-Any program or notebook can query and change your model over HTTP.
+Any program can query and change your model over HTTP. In notebooks, the `sysmantic` package
+does it for you (see [Work in a notebook](#work-in-a-notebook)).
 
 Run `sysmantic start` first. The server's address is in the model's `.sysmantic/server.json`.
 
@@ -307,6 +517,8 @@ The tools Sysmantic gives AI agents.
 | `evaluate`, `verify` | Computes values and verdicts |
 | `update` | Changes the model |
 | `graph` | Shows you a graph in VS Code |
+| `show_view` | Shows you one of the standard views of an element in VS Code |
+| `read_view` | Gives what a standard view shows, as text or a picture |
 | `manual` | Gives a section of this manual |
 
 The manual is also available as MCP resources: `sysmantic://manual`, and one per section.
@@ -322,6 +534,8 @@ The extension's commands and settings.
 | Sysmantic: Run Query in Sysmantic | Runs the selection or query file |
 | Sysmantic: Open Model Graph | Draws the model as a graph |
 | Sysmantic: Show in Graph | Draws an element and its neighbors |
+| Sysmantic: Open General View (Interconnection, Action Flow, State Transition, Sequence, Grid, Geometry) | Opens that standard view of the element at the cursor |
+| Sysmantic: Open View | Opens a `view` declared in the model, as it declares |
 | Sysmantic: Open Manual | Opens this manual |
 | Sysmantic: Show Model Server | Shows the model's server |
 | Sysmantic: Restart Model Server | Restarts it |
@@ -332,6 +546,7 @@ The extension's commands and settings.
 |---|---|
 | `sysmantic.path` | The `sysmantic` command to use (default: the one included) |
 | `sysmantic.queriesFolder` | Where the panel saves queries (default: `queries`) |
+| `sysmantic.views.stylesheet` | A CSS file that restyles the standard views (see [Style the views](#style-the-views)) |
 | `sysmantic.inlayHints.values` | Computed values inline (on) |
 | `sysmantic.inlayHints.impliedSpecializations` | What elements specialize implicitly (on) |
 | `sysmantic.inlayHints.defaultVisibility` | `private` before imports without one (on) |
