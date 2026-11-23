@@ -8,8 +8,8 @@
 </p>
 
 [Sysmantic](https://www.modelware.io/sysmantic), by [Modelware](https://www.modelware.io), checks, evaluates and queries SysML v2 and
-KerML models, from the command line, VS Code and AI agents (MCP). The standard libraries are
-built in.
+KerML models, from the command line, VS Code, notebooks and AI agents (MCP). The standard
+libraries are built in.
 
 ## Highlights
 
@@ -20,8 +20,15 @@ built in.
 - **Ask anything in SPARQL**: in the editor's panel, as tables, charts and values, with
   completion of the model's classes and properties, and functions that compute values and
   verdicts inside a query.
+- **SysML's standard views**: General, Interconnection, Action Flow, State Transition,
+  Sequence, Grid and Geometry (3D) views, drawn from the model as you edit, and styled with
+  your own CSS.
+- **A Model Explorer**: every element of the model, nested as declared, filtered by name or
+  kind, and in step with the editor.
 - **The model as a graph**: elements and relationships drawn in an editor tab, to explore,
   filter and save with the model.
+- **Analysis in Python and notebooks**: SysML in cells, queries as tables, values and verdicts
+  in Python, and the standard views drawn in Jupyter and VS Code notebooks.
 - **Agents that work on the live model**: MCP tools to read, compute, change and show graphs,
   with every change answered by its diff and the problems it added or removed.
 - **One model for everyone**: the editor, agents, the command line, CI and your own programs
@@ -65,6 +72,15 @@ The command goes into `~/.local/bin` (on Windows, `%LOCALAPPDATA%\sysmantic\bin`
 and Linux, in your shell's startup file; set `SYSMANTIC_NO_MODIFY_PATH=1` to skip that), so new terminals
 and editors find `sysmantic`.
 
+### Python (scripts and notebooks)
+
+Install the command line (above), then the Python package, at the same version:
+
+```sh
+pip install sysmantic               # scripts
+pip install "sysmantic[notebook]"   # notebooks too
+```
+
 ### AI agents (MCP)
 
 Install the command line (above), then register `sysmantic mcp` with your agent, for example in
@@ -102,8 +118,8 @@ sysmantic query 'SELECT ?p WHERE { ?p a sysml:Part }' # anything, in SPARQL
 ```
 
 The [manual](MANUAL.md) covers using Sysmantic in VS Code, with agents, on the command line, in
-CI and from programs (its HTTP API): queries, values and verdicts, graphs, changing the model,
-and settings. Agents read it too, through the MCP tool `manual`, and `sysmantic manual` prints it.
+CI, in notebooks and from programs (its HTTP API): queries, values and verdicts, graphs, the
+standard views, changing the model, and settings. Agents read it too, through the MCP tool `manual`, and `sysmantic manual` prints it.
 
 ## Example
 
@@ -111,7 +127,7 @@ The [Apollo 11 dashboard](https://www.modelware.io/apollo-11-sysml-v2/) is built
 from Airbus's [SysML v2 model of Apollo 11](https://github.com/airbus/apollo-11-sysml-v2): the
 timeline, functions, budgets, requirements, cost and model quality. Each page was made with a
 Jupyter notebook that sends SPARQL queries to the model's Sysmantic server and charts the answers
-(see the manual's [Programs and notebooks](MANUAL.md#programs-and-notebooks)).
+(see the manual's [Work in a notebook](MANUAL.md#work-in-a-notebook)).
 
 ## Performance
 
