@@ -5,6 +5,7 @@
 <p align="center">
   <a href="https://github.com/modelware/sysmantic/releases/latest"><img src="https://img.shields.io/github/v/release/modelware/sysmantic?label=release" alt="Latest release"></a>
   <a href="MANUAL.md"><img src="https://img.shields.io/badge/manual-read-4C78A8" alt="Manual"></a>
+  <a href="examples"><img src="https://img.shields.io/badge/examples-try-59A14F" alt="Examples"></a>
 </p>
 
 [Sysmantic](https://www.modelware.io/sysmantic), by [Modelware](https://www.modelware.io), checks, evaluates and queries SysML v2 and
@@ -121,7 +122,11 @@ The [manual](MANUAL.md) covers using Sysmantic in VS Code, with agents, on the c
 CI, in notebooks and from programs (its HTTP API): queries, values and verdicts, graphs, the
 standard views, changing the model, and settings. Agents read it too, through the MCP tool `manual`, and `sysmantic manual` prints it.
 
-## Example
+## Examples
+
+[Worked examples](examples), each a model and a notebook that analyzes it, to clone and run:
+[CubeSat power](examples/cubesat-power) simulates a 3U CubeSat's battery through a day of orbits
+and lets the model decide its requirements.
 
 The [Apollo 11 dashboard](https://www.modelware.io/apollo-11-sysml-v2/) is built with Sysmantic
 from Airbus's [SysML v2 model of Apollo 11](https://github.com/airbus/apollo-11-sysml-v2): the
@@ -158,3 +163,4 @@ packages: info@modelware.io.
 
 Free to use, including by companies and consultants. Reselling, redistributing or building
 products on it needs a license from Modelware (info@modelware.io). See [LICENSE.md](LICENSE.md).
+The [examples](examples) are open source, under the Apache License 2.0.
